@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">RegisterCall</string>
+    <string name="buttonClicavel">Chamadas recebidas</string>
+    <string name="qtdLigacoes">0</string>
+    <string name="txtAprensentacao">HISTORICO DE CHAMADAS</string>
+    <string name="todo">TODO</string>
+    <string name="name_user_call_text">Quem ligou?</string>
+    <string name="duration_call_user_text">00:00</string>
+    <string name="view_duration_text">Duração</string>
+    <string name="apresentationCallReceived">Duração (s)</string>
+    <string name="titleReceivedCall">CHAMADA PERDIDA</string>
+    <string name="numberCallReceived">0</string>
+</resources>
