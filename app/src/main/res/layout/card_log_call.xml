@@ -5,6 +5,7 @@
     android:id="@+id/wrapp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/backgroundDark"
     android:gravity="top"
     android:orientation="vertical"
     android:padding="10dp">
@@ -17,43 +18,48 @@
 
         <TextView
             android:id="@+id/name_user_call_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_margin="0dp"
+            android:padding="0dp"
             android:text="@string/name_user_call_text"
             android:textColor="@color/textCard"
             android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/label_call_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:textColor="@color/textColorRed"
             android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="29dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="130dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_access_time_black_24dp"
-            tools:srcCompat="@drawable/ic_access_time_black_24dp" />
-
-        <TextView
-            android:id="@+id/view_duration_text"
-            android:layout_width="215dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/view_duration_text"
-            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/duration_call_user_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/duration_call_user_text" />
+            android:text="@string/duration_call_user_text"
+            android:textColor="@android:color/background_light"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/date_call_user_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/duration_call_user_text"
+            android:textColor="@color/subtext" />
     </LinearLayout>
 
 </LinearLayout>

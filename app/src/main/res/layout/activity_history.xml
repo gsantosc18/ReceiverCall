@@ -12,11 +12,11 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="@android:color/background_dark"
+        android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="15dp"
-        android:baselineAligned="false">
+        android:padding="15dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
@@ -34,10 +34,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:contentDescription="@string/todo"
-                android:src="@drawable/ic_call_missed_black_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_call_missed_black_24dp" />
 
             <TextView
                 android:id="@+id/aprensentacao"
@@ -61,6 +61,7 @@
     <ListView
         android:id="@+id/listLogCall"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/backgroundDark" />
 
 </LinearLayout>

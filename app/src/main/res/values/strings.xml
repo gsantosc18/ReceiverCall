@@ -10,4 +10,5 @@
     <string name="apresentationCallReceived">Duração (s)</string>
     <string name="titleReceivedCall">CHAMADA PERDIDA</string>
     <string name="numberCallReceived">0</string>
+    <string name="btnBackHome">Histórico</string>
 </resources>

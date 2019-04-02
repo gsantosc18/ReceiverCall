@@ -18,7 +18,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.registercall.model.ChamadaDAO;
+import com.example.registercall.model.ChamadaEntity;
 import com.example.registercall.model.LogCall;
+
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -42,35 +46,18 @@ public class MainActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        TextView qtdLigacoes = (TextView) findViewById(R.id.qtdLigacoes);
+        qtdLigacoes.setText(String.valueOf(countLigacoes()));
+    }
+
     private int countLigacoes() {
-        int qtdLigacoes = 0;
-        try {
-
-            String permission = Manifest.permission.READ_CALL_LOG;
-
-            if (ActivityCompat.checkSelfPermission(this, permission ) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        "O aplicativo precisa de algumas permissões para funcionar!",
-                        Toast.LENGTH_LONG
-                ).show();
-                return 0;
-            }
-
-            Cursor managedCursor =
-                    getContentResolver()
-                            .query(
-                                    CallLog.Calls.CONTENT_URI,
-                                    null,
-                                    null,
-                                    null,
-                                    null
-                            );
-            qtdLigacoes = managedCursor.getCount();
-        } catch (Exception ex) {
-            Log.e("Erro Recuperar ligações", ex.getMessage());
-        }
-
-        return qtdLigacoes;
+        // Instancia a comunicacao com o banco de dados
+        ChamadaDAO chamadaDAO = new ChamadaDAO(MainActivity.this);
+        // Recupera a lista de chamadas registradas no banco
+        return chamadaDAO.all().size();
     }
 }

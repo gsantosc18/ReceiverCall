@@ -12,10 +12,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.registercall.model.ChamadaDAO;
+import com.example.registercall.model.ChamadaEntity;
 import com.example.registercall.model.CustomAdapter;
 import com.example.registercall.model.LogCall;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HistoryActivity extends Activity {
@@ -24,25 +28,68 @@ public class HistoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        showHistorico();
+    }
 
+    private void showHistorico() {
         ListView listView = (ListView) findViewById(R.id.listLogCall);
 
         List<LogCall> logCallList = null;
 
         try{
 
-            logCallList = getCallDetails();
+            logCallList = listHistoryCalls();
 
         }catch (Exception ex){
+            ex.printStackTrace();
             Log.e("Error ao exibir", ex.getMessage());
         }
-
 
         CustomAdapter adapter = new CustomAdapter(HistoryActivity.this,logCallList);
 
         listView.setAdapter(adapter);
     }
 
+    /**
+     * @return
+     */
+    private List<LogCall> listHistoryCalls() {
+        List<LogCall> logCallList = new ArrayList<>();
+        try {
+            // Pega o historico do celular
+//            logCallList = getCallDetails();
+
+            // Instancia a comunicacao com o banco de dados
+            ChamadaDAO chamadaDAO = new ChamadaDAO(HistoryActivity.this);
+
+            // Recupera a lista de chamadas registradas no banco
+            List<ChamadaEntity> chamadaEntityList = chamadaDAO.all();
+
+            if(chamadaEntityList != null) {
+                for (ChamadaEntity chamada : chamadaEntityList) {
+                    LogCall logCall = new LogCall(
+                            chamada.getNumero(),
+                            chamada.getDuracao(),
+                            chamada.getData_inicio()
+                    );
+                    logCallList.add(logCall);
+                }
+            }
+
+        } catch (Exception ex) { }
+
+        return logCallList;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showHistorico();
+    }
+
+    /**
+     * @return
+     */
     private List<LogCall> getCallDetails() {
 
         List<LogCall> logCallList = new ArrayList<>();
@@ -97,6 +144,32 @@ public class HistoryActivity extends Activity {
         }
 
         return logCallList;
+    }
+
+    /**
+     * @param lista
+     * @return
+     */
+    private List<LogCall> agrupa(List<LogCall> lista) {
+        List<LogCall> listaAgrupada = new ArrayList<>();
+
+        for (int i = 1; i<lista.size(); i++) {
+
+            String anterior = lista.get(i-1).getNumber();
+            String atual = lista.get(i).getNumber();
+
+            if( anterior.equalsIgnoreCase(atual) ) {
+
+                int posicao = listaAgrupada.size() - 1;
+
+                LogCall ultimoLog = listaAgrupada.get( posicao );
+                ultimoLog.setQtd( ultimoLog.getQtd() + 1 );
+
+                listaAgrupada.set( posicao, ultimoLog );
+            }
+        }
+
+        return listaAgrupada;
     }
 
     @Override

@@ -6,6 +6,7 @@ public class LogCall {
     private String number;
     private int duration;
     private String date;
+    private int qtd;
 
     public LogCall(String number, int duration, String date) {
         this.number = number;
@@ -35,5 +36,13 @@ public class LogCall {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getQtd() {
+        return qtd;
+    }
+
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
     }
 }
