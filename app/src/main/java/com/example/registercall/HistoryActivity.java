@@ -16,6 +16,7 @@ import com.example.registercall.model.ChamadaDAO;
 import com.example.registercall.model.ChamadaEntity;
 import com.example.registercall.model.CustomAdapter;
 import com.example.registercall.model.LogCall;
+import com.example.registercall.model.RegisterNotification;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,6 +86,7 @@ public class HistoryActivity extends Activity {
     protected void onResume() {
         super.onResume();
         showHistorico();
+        RegisterNotification.stopCount();
     }
 
     /**

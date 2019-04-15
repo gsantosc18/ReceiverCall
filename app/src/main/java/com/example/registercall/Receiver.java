@@ -28,6 +28,9 @@ public class Receiver extends BroadcastReceiver {
     private static long inicio = 0;
     private static long fim = 0;
 
+    private final String ATENDIDO = "antendido";
+    private final String PERDIDO = "perdido";
+
     public static void addInicio() { inicio = Calendar.getInstance().getTimeInMillis(); }
 
     public static void addFim() { fim = Calendar.getInstance().getTimeInMillis(); }
@@ -59,7 +62,7 @@ public class Receiver extends BroadcastReceiver {
                 // Registra a chamada no banco
                 registraChamada(context, number);
                 // Abre a nova tela
-                abreTela(context,number);
+                lancaNotificacao(context,number, PERDIDO);
                 // Reseta as variaveis estaticas da classe
                 resetDuration();
             }
@@ -71,23 +74,11 @@ public class Receiver extends BroadcastReceiver {
                 // Pega as informacoes do numero de ligou
                 String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
-                // Registra a duração da chamada
-                long duration = durationRingCall();
-
                 // Registra a chamada no banco
                 registraChamada(context, number);
 
-                // Criar a intent que sera acionada ao clicar na mensagem
-                Intent activity = new Intent(context.getApplicationContext(),ShowReceivedCall.class);
+                lancaNotificacao(context,number, ATENDIDO);
 
-                // Adicionar as informacoes que serao envias para a proxima tela
-                activity.putExtra("number", number);
-                activity.putExtra("duration", durationRingCall() );
-                activity.putExtra("status","atendido");
-
-                // Cria a notificação
-                new RegisterNotification(context)
-                        .notification("Registro de chamada","Uma nova chamada foi registrada", activity);
                 // Reseta as variaveis estaticas da classe
                 resetDuration();
             }
@@ -102,16 +93,16 @@ public class Receiver extends BroadcastReceiver {
         }
     }
 
-    private void abreTela(Context context, String number) {
+    private void lancaNotificacao(Context context, String number, String status) {
         // Criar a intent que sera enviada para a proxima tela
-        Intent activity = new Intent(context.getApplicationContext(),ShowReceivedCall.class);
+        Intent activity = new Intent(context.getApplicationContext(),HistoryActivity.class);
 
         // Adicionar as informacoes que serao envias para a proxima tela
-        activity.putExtra("number", number);
-        activity.putExtra("duration", durationRingCall() );
+//        activity.putExtra("number", number);
+//        activity.putExtra("duration", durationRingCall() );
+//        activity.putExtra("status",status);
 
-        // Abre a proxima tela
-        context.startActivity(activity);
+        criaNotificacao(context,activity);
     }
 
     private void registraChamada(Context context, String number) {
@@ -139,5 +130,12 @@ public class Receiver extends BroadcastReceiver {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT-03:00"));
         return dateFormat.format(date);
+    }
+
+    private void criaNotificacao(Context context, Intent activity)
+    {
+        // Cria a notificação
+        new RegisterNotification(context)
+                .notification("Registro de chamada","nova(s) chamada foi registrada", activity);
     }
 }
