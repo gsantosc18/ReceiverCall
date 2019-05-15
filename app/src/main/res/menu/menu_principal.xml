@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--<item-->
-        <!--android:id="@+id/btnconfiguracao"-->
-        <!--android:title="@string/lbMenuPrincipalConfiguracao"/>-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/btnAbrirDiscagem"
+        android:title="Discagem"
+        android:icon="@drawable/ic_local_phone_white_24dp"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/btnAbrirAgenda"
+        android:title="Agenda"
+        android:icon="@drawable/ic_contact_phone_black_24dp"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/btnrefresh"
         android:title="@string/lbMenuPrincipalRefresh"/>

@@ -54,7 +54,6 @@ public class HistoryActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setTitle("PROTOK");
-        actionBar.setSubtitle("Registro de chamadas");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.mipmap.ic_launcher);
     }
@@ -211,6 +210,12 @@ public class HistoryActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.btnrefresh:
                 recreate();
+                break;
+            case R.id.btnAbrirAgenda:
+                abrirAgenda();
+                break;
+            case R.id.btnAbrirDiscagem:
+                abrirDiscagem();
                 break;
         }
 
@@ -387,6 +392,18 @@ public class HistoryActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse("tel:"+number));
+        startActivity(intent);
+    }
+
+    private void abrirAgenda() {
+        Intent intent = new Intent(Intent.ACTION_DEFAULT, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(intent, 1);
+    }
+
+    private void abrirDiscagem()
+    {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:"));
         startActivity(intent);
     }
 }
