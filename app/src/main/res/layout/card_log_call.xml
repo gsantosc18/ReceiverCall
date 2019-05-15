@@ -29,16 +29,17 @@
 
         <TextView
             android:id="@+id/label_call_text"
-            android:layout_width="wrap_content"
+            android:layout_width="261dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="0"
             android:textColor="@color/textColorRed"
             android:textStyle="bold" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="393dp"
         android:layout_height="29dp"
         android:layout_weight="1"
         android:gravity="center"

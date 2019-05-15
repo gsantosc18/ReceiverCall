@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RegisterCall</string>
+    <string name="app_name">Protok</string>
     <string name="buttonClicavel">Chamadas recebidas</string>
     <string name="qtdLigacoes">0</string>
     <string name="txtAprensentacao">HISTORICO DE CHAMADAS</string>
@@ -11,4 +11,7 @@
     <string name="titleReceivedCall">CHAMADA PERDIDA</string>
     <string name="numberCallReceived">0</string>
     <string name="btnBackHome">Histórico</string>
+    <string name="lbMenuApagar">Apagar</string>
+    <string name="lbMenuPrincipalConfiguracao">Ajustes</string>
+    <string name="lbMenuPrincipalRefresh">Atualizar</string>
 </resources>

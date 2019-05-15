@@ -2,66 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="top"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".HistoryActivity">
-
-    <LinearLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/background_dark"
-        android:baselineAligned="false"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="15dp">
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:layout_editor_absoluteX="15dp"
-            tools:layout_editor_absoluteY="15dp">
-
-            <ImageView
-                android:id="@+id/iconView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="@string/todo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_call_missed_black_24dp" />
-
-            <TextView
-                android:id="@+id/aprensentacao"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:text="@string/txtAprensentacao"
-                android:textColor="@android:color/background_light"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iconView"
-                app:layout_constraintTop_toTopOf="parent" />
-        </android.support.constraint.ConstraintLayout>
-
-    </LinearLayout>
 
     <ListView
         android:id="@+id/listLogCall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundDark" />
+        android:background="@color/backgroundDark"/>
 
 </LinearLayout>

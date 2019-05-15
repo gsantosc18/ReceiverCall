@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +47,13 @@ public class ChamadaDAO {
         }
 
         return chamadas;
+    }
+
+    public boolean remove(ChamadaEntity chamadaEntity) {
+        try {
+            return db.delete("chamada", "id_chamada=?", new String[]{String.valueOf(chamadaEntity.getId_chamada())}) > 0;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 }

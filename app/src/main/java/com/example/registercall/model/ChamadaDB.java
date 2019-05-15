@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 class ChamadaDB extends SQLiteOpenHelper{
     private static String TABLE = "registercall";
-    private static int VERSION = 6;
+    private static int VERSION = 1;
 
     public ChamadaDB(Context ctx){
         super(ctx, TABLE, null, VERSION);
