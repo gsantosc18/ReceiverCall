@@ -19,6 +19,8 @@
         android:id="@+id/listLogCall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundDark"/>
+        android:background="@color/backgroundDark"
+        android:divider="@color/backgroundDark_light"
+        android:dividerHeight="1px"/>
 
 </LinearLayout>

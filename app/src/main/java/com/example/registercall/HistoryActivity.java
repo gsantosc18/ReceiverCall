@@ -45,6 +45,8 @@ public class HistoryActivity extends AppCompatActivity {
 
         checkPermission();
 
+        RegisterNotification.stopCount();
+
         showHistorico();
 
         ActionBar actionBar = getSupportActionBar();
@@ -164,36 +166,33 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(
-            new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    int pos = parent.getPositionForView(view);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int pos = parent.getPositionForView(view);
 
-                    final LogCall log = (LogCall) listView.getAdapter().getItem(pos);
+                final LogCall log = (LogCall) listView.getAdapter().getItem(pos);
 
-                    PopupMenu popup = new PopupMenu(HistoryActivity.this, view);
-                    popup.getMenuInflater().inflate(R.menu.menu_item, popup.getMenu());
-                    popup.show();
+                PopupMenu popup = new PopupMenu(HistoryActivity.this, view);
+                popup.getMenuInflater().inflate(R.menu.menu_item, popup.getMenu());
+                popup.show();
 
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()){
-                                case R.id.btnDiscar:
-                                    dialContactNumber(log.getNumber());
-                                    ; break;
-                                case R.id.btnChamar:
-                                    callContactNumber( log.getNumber() )
-                                    ; break;
-                            }
-                            return true;
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.btnDiscar:
+                                dialContactNumber(log.getNumber());
+                                ; break;
+                            case R.id.btnChamar:
+                                callContactNumber( log.getNumber() )
+                                ; break;
                         }
-                    });
-                }
+                        return true;
+                    }
+                });
             }
-        );
+        });
     }
 
     @Override
@@ -302,29 +301,6 @@ public class HistoryActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
-    }
-
-    private String getContactName(String number) {
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-
-        String contact = "";
-
-        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
-
-        Cursor cursor = getContentResolver().query(uri,projection,null,null,null);
-
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                contact = cursor.getString(0);
-            }
-            cursor.close();
-        }
-
-        if(contact.trim().isEmpty()) {
-            return number;
-        }
-
-        return contact;
     }
 
     private void dialContactNumber(String number)

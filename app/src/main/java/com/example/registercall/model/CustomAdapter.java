@@ -1,8 +1,6 @@
 package com.example.registercall.model;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +84,7 @@ public class CustomAdapter extends BaseAdapter {
                 action_contato.setImageResource(R.drawable.ic_call_received_white_24dp);
                 break;
             case Status.PERDIDA:
-//                action_contato.setImageResource(R.drawable.ic_call_missed_black_24dp);
+                action_contato.setImageResource(R.drawable.ic_call_missed_black_24dp);
                 break;
         }
 

@@ -9,6 +9,6 @@
     <color name="textCard">#4A9AE1</color>
     <color name="textColorGreen">#64DD17</color>
     <color name="textColorRed">#F50323</color>
-    <color name="backgroundDark">#292929</color>
-    <color name="backgroundDark_light">#4B4B4B</color>
+    <color name="backgroundDark">#000000</color>
+    <color name="backgroundDark_light">#535353</color>
 </resources>

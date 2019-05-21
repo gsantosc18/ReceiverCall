@@ -1,20 +1,14 @@
 package com.example.registercall;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.widget.Toast;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.telephony.TelephonyManager;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.example.registercall.MainActivity;
 import com.example.registercall.model.ChamadaDAO;
 import com.example.registercall.model.ChamadaEntity;
 import com.example.registercall.model.RegisterNotification;
@@ -24,7 +18,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 
 public class Receiver extends BroadcastReceiver {
@@ -34,6 +27,7 @@ public class Receiver extends BroadcastReceiver {
 
     private final String ATENDIDO = "antendido";
     private final String PERDIDO = "perdido";
+    private static String number = "";
 
     public static void addInicio() { inicio = Calendar.getInstance().getTimeInMillis(); }
 
@@ -45,9 +39,18 @@ public class Receiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Bundle extras = intent.getExtras();
+
+        if(extras!=null){
+            String stateStr = extras.getString(TelephonyManager.EXTRA_STATE);
+            if (stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING))
+                number = extras.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+        }
+
         try{
 
-            String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
+            String stateStr = extras.getString(TelephonyManager.EXTRA_STATE);
             String data_inicio = String.valueOf(Calendar.getInstance().getTime());
 
             // Verifica se a chamada ja foi finalizada
@@ -58,8 +61,7 @@ public class Receiver extends BroadcastReceiver {
                 // Adiciona uma hora de fim da chamada
                 addFim();
 
-                // Pega as informacoes do numero de ligou
-                String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+                Toast.makeText(context, "O numero "+number+" está ligando!", Toast.LENGTH_SHORT).show();
 
                 // Registra a chamada no banco
                 registraChamada(context, number, Status.PERDIDA);
@@ -72,9 +74,6 @@ public class Receiver extends BroadcastReceiver {
             else if(stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK) && this.inicio != 0){
                 // Adiciona uma hora de fim para a acao
                 addFim();
-
-                // Pega as informacoes do numero de ligou
-                String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
                 // Registra a chamada no banco
                 registraChamada(context, number, Status.ATENDIDA);
@@ -93,6 +92,7 @@ public class Receiver extends BroadcastReceiver {
         } catch (Exception e){
             Toast.makeText(context,"Houve um erro no App RegisterCall. "+e.getMessage(),Toast.LENGTH_LONG).show();
         }
+
     }
 
     private void lancaNotificacao(Context context, String number, String status) {

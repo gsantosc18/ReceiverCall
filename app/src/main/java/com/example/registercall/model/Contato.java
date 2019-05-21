@@ -26,7 +26,7 @@ public class Contato {
 
         String nome = getPropertie(propertie,uri);
 
-        if( nome != null )
+        if( nome != null && !nome.trim().equals("") )
             return nome;
 
         return numero;
