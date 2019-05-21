@@ -1,8 +1,6 @@
 package com.example.registercall;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -16,9 +14,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
@@ -26,10 +22,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.registercall.model.ChamadaDAO;
 import com.example.registercall.model.ChamadaEntity;
+import com.example.registercall.model.Contato;
 import com.example.registercall.model.CustomAdapter;
 import com.example.registercall.model.LogCall;
 import com.example.registercall.model.RegisterNotification;
@@ -42,7 +38,6 @@ public class HistoryActivity extends AppCompatActivity {
     private CustomAdapter adapter;
     private ListView listView;
 
-    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +46,7 @@ public class HistoryActivity extends AppCompatActivity {
         checkPermission();
 
         showHistorico();
+
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setTitle("PROTOK");
@@ -168,33 +164,36 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int pos = parent.getPositionForView(view);
+        listView.setOnItemClickListener(
+            new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int pos = parent.getPositionForView(view);
 
-                final LogCall log = (LogCall) listView.getAdapter().getItem(pos);
+                    final LogCall log = (LogCall) listView.getAdapter().getItem(pos);
 
-                PopupMenu popup = new PopupMenu(HistoryActivity.this, view);
-                popup.getMenuInflater().inflate(R.menu.menu_item, popup.getMenu());
-                popup.show();
+                    PopupMenu popup = new PopupMenu(HistoryActivity.this, view);
+                    popup.getMenuInflater().inflate(R.menu.menu_item, popup.getMenu());
+                    popup.show();
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
-                            case R.id.btnDiscar:
-                                dialContactNumber(log.getNumber());
-                                ; break;
-                            case R.id.btnChamar:
-                                callContactNumber( log.getNumber() )
-                                ; break;
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()){
+                                case R.id.btnDiscar:
+                                    dialContactNumber(log.getNumber());
+                                    ; break;
+                                case R.id.btnChamar:
+                                    callContactNumber( log.getNumber() )
+                                    ; break;
+                            }
+                            return true;
                         }
-                        return true;
-                    }
-                });
+                    });
+                }
             }
-        });
+        );
     }
 
     @Override
@@ -209,6 +208,13 @@ public class HistoryActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.btnrefresh:
+                Toast
+                    .makeText(
+                            HistoryActivity.this,
+                            "Lista atualizada!",
+                            Toast.LENGTH_SHORT
+                    )
+                    .show();
                 recreate();
                 break;
             case R.id.btnAbrirAgenda:
@@ -228,24 +234,26 @@ public class HistoryActivity extends AppCompatActivity {
     private List<LogCall> listHistoryCalls() {
         List<LogCall> logCallList = new ArrayList<>();
         try {
-            // Pega o historico do celular
-//            logCallList = getCallDetails();
 
             // Instancia a comunicacao com o banco de dados
             ChamadaDAO chamadaDAO = new ChamadaDAO(HistoryActivity.this);
+
+            Contato info = new Contato(HistoryActivity.this);
 
             // Recupera a lista de chamadas registradas no banco
             List<ChamadaEntity> chamadaEntityList = chamadaDAO.all();
             if(chamadaEntityList != null) {
                 for (ChamadaEntity chamada : chamadaEntityList) {
 
-                    String name_contact = getContactName(chamada.getNumero());
+                    String name_contact = info.getINomeByNumero( chamada.getNumero() );
+                    String foto_contact = info.getImagemByNumero( chamada.getNumero() );
 
                     LogCall logCall = new LogCall(
                             name_contact,
                             chamada.getNumero(),
                             chamada.getDuracao(),
                             chamada.getData_inicio(),
+                            foto_contact,
                             chamada
                     );
                     logCallList.add(logCall);
@@ -262,66 +270,6 @@ public class HistoryActivity extends AppCompatActivity {
         super.onResume();
         showHistorico();
         RegisterNotification.stopCount();
-    }
-
-    /**
-     * @return
-     */
-    private List<LogCall> getCallDetails() {
-
-        List<LogCall> logCallList = new ArrayList<>();
-
-        try {
-
-            String permission = Manifest.permission.READ_CALL_LOG;
-
-            if (ActivityCompat.checkSelfPermission(this, permission ) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        "O aplicativo precisa de algumas permissões para funcionar!",
-                        Toast.LENGTH_LONG
-                ).show();
-                return null;
-            }
-
-            Cursor managedCursor =
-                    getContentResolver()
-                    .query(
-                            CallLog.Calls.CONTENT_URI,
-                            null,
-                            null,
-                            null,
-                            null
-                    );
-
-            int number =
-                    managedCursor
-                            .getColumnIndex(
-                                    CallLog.Calls.NUMBER
-                            );
-            int duration = managedCursor.getColumnIndex(
-                    CallLog.Calls.DURATION
-            );
-
-            int date = managedCursor.getColumnIndex(
-                    CallLog.Calls.DATE
-            );
-
-            while(managedCursor.moveToNext()) {
-                String telefone_numero = managedCursor.getString(number);
-                String data_chamada = managedCursor.getString(date);
-                int duracao_chamada = managedCursor.getInt(duration);
-                String name_contact = getContactName(telefone_numero);
-
-                LogCall logCall = new LogCall(name_contact, telefone_numero, duracao_chamada, data_chamada);
-
-                logCallList.add(logCall);
-            }
-        } catch (Exception ex) {
-            Log.e("Erro listagem", ex.getMessage());
-        }
-
-        return logCallList;
     }
 
     /**
@@ -378,8 +326,6 @@ public class HistoryActivity extends AppCompatActivity {
 
         return contact;
     }
-
-
 
     private void dialContactNumber(String number)
     {

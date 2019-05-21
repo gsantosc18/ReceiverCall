@@ -1,19 +1,15 @@
 package com.example.registercall.model;
 
-import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +19,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -69,28 +64,38 @@ public class CustomAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         final LogCall log = this.logCalls.get(position);
+        Format formatar = new Format();
 
         convertView = LayoutInflater.from(this.context).inflate(R.layout.card_log_call,null);
 
         TextView nome = convertView.findViewById(R.id.name_user_call_text);
         TextView duracao = convertView.findViewById(R.id.duration_call_user_text);
-        TextView label = convertView.findViewById(R.id.label_call_text);
         TextView date = convertView.findViewById(R.id.date_call_user_text);
 
+        ImageView foto_contato = convertView.findViewById(R.id.foto_contato);
+        ImageView action_contato = convertView.findViewById(R.id.action_call);
+
+        View lineOption = convertView.findViewById(R.id.lineItem);
+        LinearLayout optionsItem = convertView.findViewById(R.id.optionsItem);
+
         nome.setText(log.getName());
-        duracao.setText(String.valueOf(log.getDuration())+"s");
+        duracao.setText( formatar.hour(log.getDuration()*1000,"mm:ss") );
+
+        switch (log.getChamada().getStatus()) {
+            case Status.ATENDIDA:
+                action_contato.setImageResource(R.drawable.ic_call_received_white_24dp);
+                break;
+            case Status.PERDIDA:
+//                action_contato.setImageResource(R.drawable.ic_call_missed_black_24dp);
+                break;
+        }
+
+//        foto_contato.setImageURI( log.getFoto() );
 
         try {
             date.setText( formatDateHour( log.getDate() ) );
         } catch (ParseException e) {
             Log.e("Erro datetime", e.getMessage());
-        }
-
-        label.setText(" Toque");
-
-        if(log.getDuration() > 5) {
-            label.setText(" Chamada");
-            label.setTextColor(Color.GREEN);
         }
 
         return convertView;

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 class ChamadaDB extends SQLiteOpenHelper{
     private static String TABLE = "registercall";
-    private static int VERSION = 1;
+    private static int VERSION = 2;
 
     public ChamadaDB(Context ctx){
         super(ctx, TABLE, null, VERSION);
@@ -19,7 +19,8 @@ class ChamadaDB extends SQLiteOpenHelper{
                 "\tnumero varchar(250),\n" +
                 "\tduracao integer,\n" +
                 "\tdata_inicio varchar(250),\n" +
-                "\tdata_fim varchar(250)\n" +
+                "\tdata_fim varchar(250),\n" +
+                "\tstatus integer(5) default 1\n" +
                 ");");
     }
 

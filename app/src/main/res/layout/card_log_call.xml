@@ -5,7 +5,7 @@
     android:id="@+id/wrapp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/backgroundDark"
+    android:background="@color/colorPrimary"
     android:gravity="top"
     android:orientation="vertical"
     android:padding="10dp">
@@ -16,51 +16,128 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/name_user_call_text"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:padding="0dp"
-            android:text="@string/name_user_call_text"
-            android:textColor="@color/textCard"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_marginRight="10dp"
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/label_call_text"
-            android:layout_width="261dp"
-            android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/foto_contato"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/ic_launcher" />
+        </android.support.constraint.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="0"
-            android:textColor="@color/textColorRed"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/name_user_call_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:padding="0dp"
+                    android:text="@string/name_user_call_text"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/duration_call_user_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="0"
+                    android:textColor="@color/subtext"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/date_call_user_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/duration_call_user_text"
+                    android:textColor="@color/subtext" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/action_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_call_missed_black_24dp" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="393dp"
-        android:layout_height="29dp"
+        android:id="@+id/options_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/duration_call_user_text"
+        <View
+            android:id="@+id/lineItem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/duration_call_user_text"
-            android:textColor="@android:color/background_light"
-            android:textStyle="bold" />
+            android:layout_height="1dp"
+            android:layout_weight="0"
+            android:background="@color/backgroundDark_light"
+            android:visibility="visible" />
 
-        <TextView
-            android:id="@+id/date_call_user_text"
+        <LinearLayout
+            android:id="@+id/optionsItem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/duration_call_user_text"
-            android:textColor="@color/subtext" />
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:visibility="visible">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="187dp"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundDark"
+                app:srcCompat="@drawable/ic_local_phone_white_24dp" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundDark"
+                app:srcCompat="@drawable/ic_contact_phone_black_24dp" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

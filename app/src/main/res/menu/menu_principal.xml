@@ -9,9 +9,11 @@
     <item
         android:id="@+id/btnAbrirAgenda"
         android:title="Agenda"
-        android:icon="@drawable/ic_contact_phone_black_24dp"
+        android:icon="@drawable/ic_person_white_24dp"
         app:showAsAction="always"/>
     <item
         android:id="@+id/btnrefresh"
-        android:title="@string/lbMenuPrincipalRefresh"/>
+        android:title="@string/lbMenuPrincipalRefresh"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        app:showAsAction="always"/>
 </menu>

@@ -24,6 +24,7 @@ public class ChamadaDAO {
         contentValues.put("duracao",chamadaEntity.getDuracao());
         contentValues.put("data_inicio",chamadaEntity.getData_inicio());
         contentValues.put("data_fim",chamadaEntity.getData_inicio());
+        contentValues.put("status",chamadaEntity.getStatus());
         db.insert("chamada",null,contentValues);
     }
 
@@ -40,7 +41,8 @@ public class ChamadaDAO {
                        cursor.getString(cursor.getColumnIndex("numero")),
                        cursor.getInt(cursor.getColumnIndex("duracao")),
                        cursor.getString(cursor.getColumnIndex("data_inicio")),
-                       cursor.getString(cursor.getColumnIndex("data_fim"))
+                       cursor.getString(cursor.getColumnIndex("data_fim")),
+                       cursor.getInt(cursor.getColumnIndex("status"))
                );
                chamadas.add(chamada);
            } while (cursor.moveToNext());

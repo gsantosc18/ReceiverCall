@@ -9,15 +9,18 @@ public class ChamadaEntity {
     private String data_inicio;
     private String data_fim;
 
+    private int status;
+
 
     public ChamadaEntity() {}
 
-    public ChamadaEntity(int id_chamada, String numero, int duracao, String data_inicio,String data_fim) {
+    public ChamadaEntity(int id_chamada, String numero, int duracao, String data_inicio,String data_fim, int status) {
         setId_chamada(id_chamada);
         setNumero(numero);
         setDuracao(duracao);
         setData_inicio(data_inicio);
         setData_fim(data_fim);
+        setStatus(status);
     }
 
     /**
@@ -88,5 +91,19 @@ public class ChamadaEntity {
      */
     public void setData_inicio(String data_inicio) {
         this.data_inicio = data_inicio;
+    }
+
+    /**
+     * @return
+     */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status
+     */
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

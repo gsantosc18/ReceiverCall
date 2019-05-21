@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
@@ -16,11 +18,13 @@ import com.example.registercall.MainActivity;
 import com.example.registercall.model.ChamadaDAO;
 import com.example.registercall.model.ChamadaEntity;
 import com.example.registercall.model.RegisterNotification;
+import com.example.registercall.model.Status;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 public class Receiver extends BroadcastReceiver {
@@ -57,10 +61,8 @@ public class Receiver extends BroadcastReceiver {
                 // Pega as informacoes do numero de ligou
                 String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
-                Toast.makeText(context,"A ligação foi finalizada!",Toast.LENGTH_LONG).show();
-
                 // Registra a chamada no banco
-                registraChamada(context, number);
+                registraChamada(context, number, Status.PERDIDA);
                 // Abre a nova tela
                 lancaNotificacao(context,number, PERDIDO);
                 // Reseta as variaveis estaticas da classe
@@ -75,7 +77,7 @@ public class Receiver extends BroadcastReceiver {
                 String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
                 // Registra a chamada no banco
-                registraChamada(context, number);
+                registraChamada(context, number, Status.ATENDIDA);
 
                 lancaNotificacao(context,number, ATENDIDO);
 
@@ -105,7 +107,7 @@ public class Receiver extends BroadcastReceiver {
         criaNotificacao(context,activity);
     }
 
-    private void registraChamada(Context context, String number) {
+    private void registraChamada(Context context, String number, int status) {
         // Pega a data final da chamada perdida
         String data_fim = String.valueOf(Calendar.getInstance().getTime());
 
@@ -138,4 +140,6 @@ public class Receiver extends BroadcastReceiver {
         new RegisterNotification(context)
                 .notification("Registro de chamada","nova(s) chamada foi registrada", activity);
     }
+
+
 }

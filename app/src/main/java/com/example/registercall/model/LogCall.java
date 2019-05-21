@@ -10,21 +10,17 @@ public class LogCall {
     private String date;
     private int qtd;
 
+    private String foto;
+
     private ChamadaEntity chamada;
 
-    public LogCall(String name,String number, int duration, String date) {
-        this.number = number;
-        this.duration = duration;
-        this.date = date;
-        this.name = name;
-    }
-
-    public LogCall(String name, String number, int duration, String date, ChamadaEntity chamada) {
+    public LogCall(String name, String number, int duration, String date, String foto, ChamadaEntity chamada) {
         this.number = number;
         this.duration = duration;
         this.date = date;
         this.chamada = chamada;
         this.name = name;
+        this.foto = foto;
     }
 
     public String getDate() {
@@ -73,5 +69,13 @@ public class LogCall {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 }
