@@ -85,7 +85,7 @@ public class RegisterNotification {
         return COUNT+message;
     }
 
-    private void plussCount()
+    public static void plussCount()
     {
         COUNT++;
     }

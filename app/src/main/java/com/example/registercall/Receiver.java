@@ -61,8 +61,6 @@ public class Receiver extends BroadcastReceiver {
                 // Adiciona uma hora de fim da chamada
                 addFim();
 
-                Toast.makeText(context, "O numero "+number+" está ligando!", Toast.LENGTH_SHORT).show();
-
                 // Registra a chamada no banco
                 registraChamada(context, number, Status.PERDIDA);
                 // Abre a nova tela
