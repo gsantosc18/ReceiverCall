@@ -35,7 +35,7 @@ public class Contato {
     public String getImagemByNumero(String numero)
     {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(numero));
-        String propertie = ContactsContract.PhoneLookup.PHOTO_URI;
+        String propertie = ContactsContract.PhoneLookup.PHOTO_THUMBNAIL_URI;
 
         String imagem = getPropertie(propertie,uri);
 
@@ -60,26 +60,6 @@ public class Contato {
         }
 
         return response;
-    }
-
-
-
-
-
-    /**
-     * @return the photo URI
-     */
-    public Bitmap getPhotoUri(String numero) {
-        try {
-            Uri my_contact_Uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, Uri.encode(numero));
-            InputStream photo_stream = ContactsContract.Contacts.openContactPhotoInputStream(this.context.getContentResolver(),my_contact_Uri);
-            BufferedInputStream buf = new BufferedInputStream(photo_stream);
-            Bitmap my_btmp = BitmapFactory.decodeStream(buf);
-            return my_btmp;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
 }

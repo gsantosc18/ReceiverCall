@@ -21,6 +21,6 @@
         android:layout_height="match_parent"
         android:background="@color/backgroundDark"
         android:divider="@color/backgroundDark_light"
-        android:dividerHeight="1px"/>
+        android:dividerHeight="1dp"/>
 
 </LinearLayout>

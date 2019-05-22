@@ -1,6 +1,7 @@
 package com.example.registercall.model;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,6 +79,9 @@ public class CustomAdapter extends BaseAdapter {
 
         nome.setText(log.getName());
         duracao.setText( formatar.hour(log.getDuration()*1000,"mm:ss") );
+
+        if (!log.getFoto().trim().isEmpty())
+            foto_contato.setImageURI( Uri.parse( log.getFoto() ) );
 
         switch (log.getChamada().getStatus()) {
             case Status.ATENDIDA:
