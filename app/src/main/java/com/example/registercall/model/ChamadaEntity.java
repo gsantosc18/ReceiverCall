@@ -8,7 +8,6 @@ public class ChamadaEntity {
     private int duracao;
     private String data_inicio;
     private String data_fim;
-
     private int status;
 
 

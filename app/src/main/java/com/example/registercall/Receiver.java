@@ -42,9 +42,13 @@ public class Receiver extends BroadcastReceiver {
 
         Bundle extras = intent.getExtras();
 
+        // Verifica se existe algum argumento para a chamada
         if(extras!=null){
+            // Recuperar o status a ligacao
             String stateStr = extras.getString(TelephonyManager.EXTRA_STATE);
+            // Verifica se a chamada esta sendo recebida
             if (stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING))
+                // Recuperar o numero que esta realizando a ligacao
                 number = extras.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
         }
 
@@ -117,6 +121,7 @@ public class Receiver extends BroadcastReceiver {
         chamadaEntity.setDuracao( (int) durationRingCall() );
         chamadaEntity.setData_inicio( formatDateHour(inicio) );
         chamadaEntity.setData_fim( formatDateHour(fim) );
+        chamadaEntity.setStatus(status);
 
         // Classe responsavel para comunicacao com o banco de dados
         ChamadaDAO chamadaDAO = new ChamadaDAO(context);

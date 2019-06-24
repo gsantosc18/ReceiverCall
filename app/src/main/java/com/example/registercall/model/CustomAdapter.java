@@ -85,14 +85,12 @@ public class CustomAdapter extends BaseAdapter {
 
         switch (log.getChamada().getStatus()) {
             case Status.ATENDIDA:
-                action_contato.setImageResource(R.drawable.ic_call_received_white_24dp);
+                action_contato.setImageResource(R.drawable.ic_call_received_green_24dp);
                 break;
             case Status.PERDIDA:
-                action_contato.setImageResource(R.drawable.ic_call_missed_black_24dp);
+                action_contato.setImageResource(R.drawable.ic_call_missed_red_24dp);
                 break;
         }
-
-//        foto_contato.setImageURI( log.getFoto() );
 
         try {
             date.setText( formatDateHour( log.getDate() ) );

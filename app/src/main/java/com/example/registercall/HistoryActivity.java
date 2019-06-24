@@ -1,6 +1,7 @@
 package com.example.registercall;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -37,6 +38,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private CustomAdapter adapter;
     private ListView listView;
+    private NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,9 @@ public class HistoryActivity extends AppCompatActivity {
         actionBar.setTitle("PROTOK");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.mipmap.ic_launcher);
+
+        notificationManager = (NotificationManager)getSystemService(this.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
     }
 
     private void checkPermission() {
@@ -269,6 +274,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onResume();
         showHistorico();
         RegisterNotification.stopCount();
+        notificationManager.cancelAll();
     }
 
     /**
