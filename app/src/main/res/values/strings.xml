@@ -14,4 +14,7 @@
     <string name="lbMenuApagar">Apagar</string>
     <string name="lbMenuPrincipalConfiguracao">Ajustes</string>
     <string name="lbMenuPrincipalRefresh">Atualizar</string>
+    <string name="title_activity_tab_view">TabView</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

@@ -84,6 +84,9 @@ public class Receiver extends BroadcastReceiver {
 
                 // Reseta as variaveis estaticas da classe
                 resetDuration();
+
+                // Mostra o botão de gravação
+                showButtonGravacao(context);
             }
             // Verifica se uma nova chamada foi recebida
             else if(stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)){
@@ -144,5 +147,9 @@ public class Receiver extends BroadcastReceiver {
                 .notification("Registro de chamada","nova(s) chamada foi registrada", activity);
     }
 
+    private void showButtonGravacao(Context context) {
+        new RegisterNotification(context)
+                .notificationGravacao();
+    }
 
 }
