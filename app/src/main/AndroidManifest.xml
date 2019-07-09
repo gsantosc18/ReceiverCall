@@ -15,10 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".TabView"
-            android:label="@string/title_activity_tab_view"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".ShowReceivedCall" />
         <activity android:name=".HistoryActivity">
             <intent-filter>

@@ -89,27 +89,26 @@ public class RegisterNotification {
     public void launche()
     {
         Notification notification = this.builder.build();
-        this.notificationManager.notify(getNotificationId(),notification);
+        this.notificationManager.notify(0,notification);
     }
 
     public void notificationGravacao()
     {
-        String titulo = "Teste titulo";
-        String mensagem = "Teste de mensagem";
+        String titulo = "Gravador de chamada";
+        String mensagem = "";
         Intent intent = new Intent();
 
         this.builder = new NotificationCompat.Builder(context,DEFAULT_CHANNEL_ID)
                 .setContentTitle(titulo)
-                .setContentText(mensagem)
                 .setSmallIcon(android.R.drawable.ic_menu_call)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setGroup(GROUP_KEY);
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(Notification.CATEGORY_MESSAGE);
 
 
         this.setIntent(new Intent());
 
         this.addAccao(
-                R.drawable.ic_phone_white,
+                R.drawable.ic_record_voice_over_black_24dp,
                 "Gravar",
                 PendingIntent.getBroadcast(this.context, 0, intent, 0)
         );

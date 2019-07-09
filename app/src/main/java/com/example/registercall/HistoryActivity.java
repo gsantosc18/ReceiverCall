@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -57,6 +58,7 @@ public class HistoryActivity extends AppCompatActivity {
         actionBar.setTitle("PROTOK");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.mipmap.ic_launcher);
+        actionBar.setDisplayShowTitleEnabled(false);
 
         notificationManager = (NotificationManager)getSystemService(this.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();

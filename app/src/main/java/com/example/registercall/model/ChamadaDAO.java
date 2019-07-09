@@ -30,7 +30,7 @@ public class ChamadaDAO {
 
     public List<ChamadaEntity> all() {
         List<ChamadaEntity> chamadas = new ArrayList<>();
-        String query = "select * from chamada order by data_inicio desc";
+        String query = "select * from chamada order by id_chamada desc";
         Cursor cursor = this.db.rawQuery(query,null);
 
         if (cursor!=null && cursor.getCount() > 0) {
