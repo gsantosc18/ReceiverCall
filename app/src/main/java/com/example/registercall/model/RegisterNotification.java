@@ -11,6 +11,8 @@ import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.registercall.GavacaoActionActivity;
+import com.example.registercall.GravacaoActivity;
 import com.example.registercall.R;
 
 import java.util.List;
@@ -86,17 +88,23 @@ public class RegisterNotification {
         this.builder.addAction(action);
     }
 
-    public void launche()
+    public void launche( int i )
+    {
+        Notification notification = this.builder.build();
+        this.notificationManager.notify(i,notification);
+    }
+
+    public void launche( )
     {
         Notification notification = this.builder.build();
         this.notificationManager.notify(0,notification);
     }
 
-    public void notificationGravacao()
+    public NotificationManager notificationGravacao()
     {
         String titulo = "Gravador de chamada";
         String mensagem = "";
-        Intent intent = new Intent();
+        Intent intent = new Intent(context, GavacaoActionActivity.class);
 
         this.builder = new NotificationCompat.Builder(context,DEFAULT_CHANNEL_ID)
                 .setContentTitle(titulo)
@@ -110,10 +118,12 @@ public class RegisterNotification {
         this.addAccao(
                 R.drawable.ic_record_voice_over_black_24dp,
                 "Gravar",
-                PendingIntent.getBroadcast(this.context, 0, intent, 0)
+                PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         );
 
-        this.launche();
+        this.launche(1);
+
+        return this.notificationManager;
     }
 
     /**

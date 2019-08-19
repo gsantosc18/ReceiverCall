@@ -1,13 +1,12 @@
 package com.example.registercall;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 
 import com.example.registercall.model.ChamadaDAO;
 import com.example.registercall.model.ChamadaEntity;
@@ -24,6 +23,8 @@ public class Receiver extends BroadcastReceiver {
 
     private static long inicio = 0;
     private static long fim = 0;
+
+    public static NotificationManager showGravacao = null;
 
     private final String ATENDIDO = "antendido";
     private final String PERDIDO = "perdido";
@@ -71,6 +72,11 @@ public class Receiver extends BroadcastReceiver {
                 lancaNotificacao(context,number, PERDIDO);
                 // Reseta as variaveis estaticas da classe
                 resetDuration();
+
+                if (showGravacao != null) {
+                    showGravacao.cancel(1);
+                    showGravacao = null;
+                }
             }
             // Verifica se o usuario atendeu a chamada
             else if(stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK) && this.inicio != 0){
@@ -86,7 +92,7 @@ public class Receiver extends BroadcastReceiver {
                 resetDuration();
 
                 // Mostra o botão de gravação
-                showButtonGravacao(context);
+                showGravacao = showButtonGravacao(context);
             }
             // Verifica se uma nova chamada foi recebida
             else if(stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)){
@@ -147,8 +153,8 @@ public class Receiver extends BroadcastReceiver {
                 .notification("Registro de chamada","nova(s) chamada foi registrada", activity);
     }
 
-    private void showButtonGravacao(Context context) {
-        new RegisterNotification(context)
+    private NotificationManager showButtonGravacao(Context context) {
+        return ( new RegisterNotification(context) )
                 .notificationGravacao();
     }
 

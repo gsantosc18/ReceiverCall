@@ -59,6 +59,11 @@ public class CustomAdapter extends BaseAdapter {
         return dateFormat.format(date);
     }
 
+    public void add(LogCall logCall)
+    {
+        logCalls.add(logCall);
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

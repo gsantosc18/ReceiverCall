@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -30,20 +32,23 @@ import com.example.registercall.model.ChamadaDAO;
 import com.example.registercall.model.ChamadaEntity;
 import com.example.registercall.model.Contato;
 import com.example.registercall.model.CustomAdapter;
+import com.example.registercall.model.GravacaoEntity;
 import com.example.registercall.model.LogCall;
 import com.example.registercall.model.RegisterNotification;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity
+{
 
     private CustomAdapter adapter;
     private ListView listView;
     private NotificationManager notificationManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
@@ -51,25 +56,36 @@ public class HistoryActivity extends AppCompatActivity {
 
         RegisterNotification.stopCount();
 
-        showHistorico();
+
+        adapter = new CustomAdapter(HistoryActivity.this, new ArrayList<LogCall>() );
+        startHistoryTask();
 
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setTitle("PROTOK");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.mipmap.ic_launcher);
-        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
 
         notificationManager = (NotificationManager)getSystemService(this.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
+
+        listView = (ListView) findViewById(R.id.listLogCall);
+
+        listView.setAdapter(adapter);
+
+        setupListView();
     }
 
-    private void checkPermission() {
+    private void checkPermission()
+    {
         boolean canCallPhone = hasPermission(Manifest.permission.CALL_PHONE);
         boolean canReadPhoneState = hasPermission(Manifest.permission.READ_PHONE_STATE);
         boolean canReadContact = hasPermission(Manifest.permission.READ_CONTACTS);
         boolean canReadCallLog = hasPermission(Manifest.permission.READ_CALL_LOG);
         boolean canWriteCallLog = hasPermission(Manifest.permission.WRITE_CALL_LOG);
+        boolean canRecordAudio = hasPermission(Manifest.permission.RECORD_AUDIO);
+        boolean canExternalWrite = hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (canCallPhone) {
             requestPermission(Manifest.permission.CALL_PHONE);
@@ -90,21 +106,32 @@ public class HistoryActivity extends AppCompatActivity {
         if (canWriteCallLog) {
             requestPermission(Manifest.permission.READ_CONTACTS);
         }
+
+        if (canRecordAudio) {
+            requestPermission(Manifest.permission.RECORD_AUDIO);
+        }
+
+        if (canExternalWrite) {
+            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
     }
 
-    private boolean hasPermission(String permission) {
+    private boolean hasPermission(String permission)
+    {
         return ContextCompat
                 .checkSelfPermission(
                         HistoryActivity.this,
                         permission ) != PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestPermission(String permission) {
+    private void requestPermission(String permission)
+    {
         ActivityCompat.requestPermissions(HistoryActivity.this,
                 new String[]{permission},1);
     }
 
-    private void showHistorico() {
+    private void showHistorico()
+    {
         listView = (ListView) findViewById(R.id.listLogCall);
 
         List<LogCall> logCallList = null;
@@ -117,11 +144,10 @@ public class HistoryActivity extends AppCompatActivity {
             ex.printStackTrace();
             Log.e("Error ao exibir", ex.getMessage());
         }
+    }
 
-        adapter = new CustomAdapter(HistoryActivity.this,logCallList);
-
-        listView.setAdapter(adapter);
-
+    private void setupListView()
+    {
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
@@ -203,14 +229,39 @@ public class HistoryActivity extends AppCompatActivity {
         });
     }
 
+    private void startHistoryTask()
+    {
+        (new Thread(){
+            @Override
+            public void run() {
+                List<LogCall> logCallList = null;
+                try{
+
+                    logCallList = listHistoryCalls();
+
+                    for( LogCall log : logCallList ) {
+                        adapter.add(log);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                    Log.e("Error ao exibir", ex.getMessage());
+                }
+            }
+        }).run();
+    }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.menu_principal, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         super.onOptionsItemSelected(item);
 
         switch (item.getItemId()) {
@@ -230,6 +281,9 @@ public class HistoryActivity extends AppCompatActivity {
             case R.id.btnAbrirDiscagem:
                 abrirDiscagem();
                 break;
+            case R.id.btnRecord:
+                abrirGravacoes();
+                break;
         }
 
         return true;
@@ -238,7 +292,8 @@ public class HistoryActivity extends AppCompatActivity {
     /**
      * @return
      */
-    private List<LogCall> listHistoryCalls() {
+    private List<LogCall> listHistoryCalls()
+    {
         List<LogCall> logCallList = new ArrayList<>();
         try {
 
@@ -273,37 +328,12 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
         showHistorico();
         RegisterNotification.stopCount();
         notificationManager.cancelAll();
-    }
-
-    /**
-     * @param lista
-     * @return
-     */
-    private List<LogCall> agrupa(List<LogCall> lista) {
-        List<LogCall> listaAgrupada = new ArrayList<>();
-
-        for (int i = 1; i<lista.size(); i++) {
-
-            String anterior = lista.get(i-1).getNumber();
-            String atual = lista.get(i).getNumber();
-
-            if( anterior.equalsIgnoreCase(atual) ) {
-
-                int posicao = listaAgrupada.size() - 1;
-
-                LogCall ultimoLog = listaAgrupada.get( posicao );
-                ultimoLog.setQtd( ultimoLog.getQtd() + 1 );
-
-                listaAgrupada.set( posicao, ultimoLog );
-            }
-        }
-
-        return listaAgrupada;
     }
 
     @Override
@@ -326,7 +356,8 @@ public class HistoryActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void abrirAgenda() {
+    private void abrirAgenda()
+    {
         Intent intent = new Intent(Intent.ACTION_DEFAULT, ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(intent, 1);
     }
@@ -335,6 +366,12 @@ public class HistoryActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:"));
+        startActivity(intent);
+    }
+
+    private void abrirGravacoes()
+    {
+        Intent intent = new Intent(HistoryActivity.this, GravacaoActivity.class);
         startActivity(intent);
     }
 }

@@ -19,13 +19,14 @@ public class GravacaoDAO {
     public void add(GravacaoEntity gravacaoEntity) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("arquivo",gravacaoEntity.getArquivo());
-        contentValues.put("data_cadatro",gravacaoEntity.getData_cadastro());
-        db.insert("chamada",null,contentValues);
+        contentValues.put("nome",gravacaoEntity.getNome());
+        contentValues.put("data_cadastro",gravacaoEntity.getData_cadastro());
+        db.insert("gravacao",null,contentValues);
     }
 
     public List<GravacaoEntity> all() {
         List<GravacaoEntity> gravacoes = new ArrayList<>();
-        String query = "select * from chamada order by data_inicio desc";
+        String query = "select * from gravacao order by data_cadastro desc";
         Cursor cursor = this.db.rawQuery(query,null);
 
         if (cursor!=null && cursor.getCount() > 0) {
@@ -34,6 +35,7 @@ public class GravacaoDAO {
                 GravacaoEntity chamada = new GravacaoEntity(
                         cursor.getInt(cursor.getColumnIndex("id_gravacao")),
                         cursor.getString(cursor.getColumnIndex("arquivo")),
+                        cursor.getString(cursor.getColumnIndex("nome")),
                         cursor.getString(cursor.getColumnIndex("data_cadastro"))
                 );
                 gravacoes.add(chamada);

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundDark"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".GavacaoActionActivity">
+
+    <TextView
+        android:id="@+id/txtGravacao"
+        android:layout_width="match_parent"
+        android:layout_height="127dp"
+        android:gravity="center"
+        android:text="@string/txtGravacaoLabel"
+        android:textColor="@color/colorAccent"
+        android:textSize="45sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/statusGravacaoTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/statusGravacao"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/btnGravar"
+        android:layout_width="134dp"
+        android:layout_height="134dp"
+        android:background="@drawable/ic_play_circle_filled_white_24dp" />
+
+    <TextView
+        android:id="@+id/labelSegundo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/labelTempoGravacao"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/labelNotification"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:gravity="center"
+        android:text="@string/labelNotification"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+</LinearLayout>
