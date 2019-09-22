@@ -10,13 +10,17 @@ import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.registercall.model.GravacaoAdapter;
 import com.example.registercall.model.GravacaoDAO;
 import com.example.registercall.model.GravacaoEntity;
+import com.example.registercall.model.RecorderAudio;
 
 public class GravacaoActivity extends AppCompatActivity
 {
@@ -31,7 +35,6 @@ public class GravacaoActivity extends AppCompatActivity
 
         actionBar.setTitle("Gravações");
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.mipmap.ic_launcher);
         actionBar.setDisplayShowTitleEnabled(true);
 
         final ListView listView = (ListView) findViewById(R.id.listGravacoes);
@@ -92,12 +95,46 @@ public class GravacaoActivity extends AppCompatActivity
             public void onDestroyActionMode(ActionMode mode) {
             }
         });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            int pos = parent.getPositionForView(view);
+
+            final GravacaoEntity gravacao = (GravacaoEntity) listView.getAdapter().getItem(pos);
+
+            PopupMenu popup = new PopupMenu(GravacaoActivity.this, view);
+            popup.getMenuInflater().inflate(R.menu.menu_gravacao, popup.getMenu());
+            popup.show();
+
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()){
+                        case R.id.btnOuvirGravacao:
+                            RecorderAudio.setName( gravacao.getNome() );
+                            String path = RecorderAudio.getNameAbsolute();
+
+                            String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(path);
+                            String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+
+                            Log.e("Audio",path+" tipo: "+mimetype+" extensao: "+extension);
+
+                            Intent intent = new Intent();
+                            intent.setAction(android.content.Intent.ACTION_VIEW);
+                            intent.setDataAndType(Uri.parse(path), mimetype);
+                            startActivity(intent);
+                    }
+                    return true;
+                }
+            });
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.menu_principal, menu);
         return true;
     }
 
@@ -107,46 +144,11 @@ public class GravacaoActivity extends AppCompatActivity
         super.onOptionsItemSelected(item);
 
         switch (item.getItemId()) {
-            case R.id.btnrefresh:
-                Toast
-                        .makeText(
-                                GravacaoActivity.this,
-                                "Lista atualizada!",
-                                Toast.LENGTH_SHORT
-                        )
-                        .show();
-                recreate();
-                break;
-            case R.id.btnAbrirAgenda:
-                abrirAgenda();
-                break;
-            case R.id.btnAbrirDiscagem:
-                abrirDiscagem();
-                break;
-            case R.id.btnRecord:
-                abrirGravacoes();
-                break;
+            case android.R.id.home:
+                Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
+                startActivity(intent); break;
         }
 
         return true;
-    }
-
-    private void abrirAgenda()
-    {
-        Intent intent = new Intent(Intent.ACTION_DEFAULT, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intent, 1);
-    }
-
-    private void abrirDiscagem()
-    {
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:"));
-        startActivity(intent);
-    }
-
-    private void abrirGravacoes()
-    {
-        Intent intent = new Intent(GravacaoActivity.this, GravacaoActivity.class);
-        startActivity(intent);
     }
 }

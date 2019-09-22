@@ -39,30 +39,30 @@ public class GavacaoActionActivity extends AppCompatActivity {
         btnGravar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
+            try {
 
-                    if ( !isGravando ){
-                        startGravacao();
-                        startCronometer();
-                        labelNotification.setText("");
-                    }
-                    else {
-                        stopGravacao();
-                        labelNotification.setText("Gravação salva em: "+RecorderAudio.getName());
-                    }
-
-                } catch (IOException e) {
-                    Log.e("Erro Gravação",e.getMessage());
-                } catch (Exception e) {
-                    Log.e("Erro Gravação",e.getMessage());
+                if ( !isGravando ){
+                    startGravacao();
+                    startCronometer();
+                    labelNotification.setText("");
                 }
+                else {
+                    stopGravacao();
+                    labelNotification.setText("Gravação salva em: "+RecorderAudio.getName());
+                }
+
+            } catch (IOException e) {
+                Log.e("Erro Gravação",e.getMessage());
+            } catch (Exception e) {
+                Log.e("Erro Gravação",e.getMessage());
+            }
             }
         });
     }
 
     private void startGravacao() throws IOException {
 
-        RecorderAudio.setName(generateLabel());
+        RecorderAudio.setDate(generateLabel());
         RecorderAudio.start();
 
         btnGravar.setBackgroundResource(R.drawable.ic_pause_circle_filled_black_24dp);

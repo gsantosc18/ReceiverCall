@@ -33,10 +33,12 @@ public class RecorderAudio {
             throw new Exception("O Gravador de audio não está ativo.");
     }
 
-    public static void setName(String date)
+    public static void setDate(String date)
     {
         name = PREFIX+"_"+date+"."+EXTENSION;
     }
+
+    public static void setName(String name) { RecorderAudio.name = name; }
 
     public static String getName()
     {

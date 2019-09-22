@@ -48,6 +48,8 @@ public class ChamadaDAO {
            } while (cursor.moveToNext());
         }
 
+        this.db.close();
+
         return chamadas;
     }
 

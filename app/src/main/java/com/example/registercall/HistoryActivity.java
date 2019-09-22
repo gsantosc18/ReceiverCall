@@ -58,6 +58,7 @@ public class HistoryActivity extends AppCompatActivity
 
 
         adapter = new CustomAdapter(HistoryActivity.this, new ArrayList<LogCall>() );
+
         startHistoryTask();
 
         ActionBar actionBar = getSupportActionBar();
