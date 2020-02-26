@@ -15,12 +15,10 @@
         android:layout_height="2dp"
         android:background="@color/colorAccent" />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/listLogCall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundDark"
-        android:divider="@color/backgroundDark_light"
-        android:dividerHeight="1dp"/>
+        android:background="@color/backgroundDark" />
 
 </LinearLayout>
