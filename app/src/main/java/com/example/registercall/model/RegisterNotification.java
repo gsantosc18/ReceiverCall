@@ -12,7 +12,6 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.registercall.GavacaoActionActivity;
-import com.example.registercall.GravacaoActivity;
 import com.example.registercall.R;
 
 import java.util.List;
@@ -98,32 +97,6 @@ public class RegisterNotification {
     {
         Notification notification = this.builder.build();
         this.notificationManager.notify(0,notification);
-    }
-
-    public NotificationManager notificationGravacao()
-    {
-        String titulo = "Gravador de chamada";
-        String mensagem = "";
-        Intent intent = new Intent(context, GavacaoActionActivity.class);
-
-        this.builder = new NotificationCompat.Builder(context,DEFAULT_CHANNEL_ID)
-                .setContentTitle(titulo)
-                .setSmallIcon(android.R.drawable.ic_menu_call)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(Notification.CATEGORY_MESSAGE);
-
-
-        this.setIntent(new Intent());
-
-        this.addAccao(
-                R.drawable.ic_record_voice_over_black_24dp,
-                "Gravar",
-                PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
-        );
-
-        this.launche(1);
-
-        return this.notificationManager;
     }
 
     /**

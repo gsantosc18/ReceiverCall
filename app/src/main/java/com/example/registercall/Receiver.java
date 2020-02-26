@@ -72,11 +72,6 @@ public class Receiver extends BroadcastReceiver {
                 lancaNotificacao(context,number, PERDIDO);
                 // Reseta as variaveis estaticas da classe
                 resetDuration();
-
-                if (showGravacao != null) {
-                    showGravacao.cancel(1);
-                    showGravacao = null;
-                }
             }
             // Verifica se o usuario atendeu a chamada
             else if(stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK) && this.inicio != 0){
@@ -90,9 +85,6 @@ public class Receiver extends BroadcastReceiver {
 
                 // Reseta as variaveis estaticas da classe
                 resetDuration();
-
-                // Mostra o botão de gravação
-                showGravacao = showButtonGravacao(context);
             }
             // Verifica se uma nova chamada foi recebida
             else if(stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)){
@@ -111,11 +103,8 @@ public class Receiver extends BroadcastReceiver {
         Intent activity = new Intent(context.getApplicationContext(),HistoryActivity.class);
 
         // Adicionar as informacoes que serao envias para a proxima tela
-//        activity.putExtra("number", number);
-//        activity.putExtra("duration", durationRingCall() );
-//        activity.putExtra("status",status);
-
-        criaNotificacao(context,activity);
+        new RegisterNotification(context)
+                .notification("Registro de chamada","nova(s) chamada foi registrada", activity);
     }
 
     private void registraChamada(Context context, String number, int status) {
@@ -144,18 +133,6 @@ public class Receiver extends BroadcastReceiver {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT-03:00"));
         return dateFormat.format(date);
-    }
-
-    private void criaNotificacao(Context context, Intent activity)
-    {
-        // Cria a notificação
-        new RegisterNotification(context)
-                .notification("Registro de chamada","nova(s) chamada foi registrada", activity);
-    }
-
-    private NotificationManager showButtonGravacao(Context context) {
-        return ( new RegisterNotification(context) )
-                .notificationGravacao();
     }
 
 }

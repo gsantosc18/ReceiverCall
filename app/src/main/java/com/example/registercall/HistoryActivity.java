@@ -56,7 +56,6 @@ public class HistoryActivity extends AppCompatActivity
 
         RegisterNotification.stopCount();
 
-
         adapter = new CustomAdapter(HistoryActivity.this, new ArrayList<LogCall>() );
 
         startHistoryTask();
@@ -282,9 +281,6 @@ public class HistoryActivity extends AppCompatActivity
             case R.id.btnAbrirDiscagem:
                 abrirDiscagem();
                 break;
-            case R.id.btnRecord:
-                abrirGravacoes();
-                break;
         }
 
         return true;
@@ -367,12 +363,6 @@ public class HistoryActivity extends AppCompatActivity
     {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:"));
-        startActivity(intent);
-    }
-
-    private void abrirGravacoes()
-    {
-        Intent intent = new Intent(HistoryActivity.this, GravacaoActivity.class);
         startActivity(intent);
     }
 }

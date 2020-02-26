@@ -2,13 +2,8 @@ package com.example.registercall.model;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
-
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 
 public class Contato {
 

@@ -1,7 +1,5 @@
 package com.example.registercall.model;
 
-import java.sql.Date;
-
 public class ChamadaEntity {
     private int id_chamada;
     private String numero;
