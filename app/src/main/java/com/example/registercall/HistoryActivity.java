@@ -19,22 +19,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.registercall.model.ChamadaDAO;
 import com.example.registercall.model.ChamadaEntity;
 import com.example.registercall.model.Contato;
-import com.example.registercall.model.CustomAdapter;
-import com.example.registercall.model.GravacaoEntity;
 import com.example.registercall.model.ListRecyclerAdapter;
 import com.example.registercall.model.LogCall;
 import com.example.registercall.model.RegisterNotification;
@@ -61,7 +52,7 @@ public class HistoryActivity extends AppCompatActivity
         RegisterNotification.stopCount();
 
         // adapter = new CustomAdapter(HistoryActivity.this, new ArrayList<LogCall>() );
-        adapter = new ListRecyclerAdapter( new ArrayList<LogCall>() );
+        adapter = new ListRecyclerAdapter();
 
         startHistoryTask();
 
@@ -242,11 +233,11 @@ public class HistoryActivity extends AppCompatActivity
             public void run() {
                 List<LogCall> logCallList = null;
                 try{
-
                     logCallList = listHistoryCalls();
 
                     for( LogCall log : logCallList ) {
                         Log.e("Chamada",log.getNumber());
+                        Log.e("Status",log.getChamada().getStatus()+"");
                         adapter.add(log);
                         adapter.notifyDataSetChanged();
                     }

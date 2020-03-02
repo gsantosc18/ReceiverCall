@@ -23,7 +23,7 @@ public class AgroupCall {
 
     public void addCall(LogCall logCall) {
         this.listLogCalls.add( logCall );
-        if ( name.trim().isEmpty() ) {
+        if ( name != null && name.trim().isEmpty() ) {
             setName( logCall.getNumber() );
         }
     }
@@ -34,5 +34,9 @@ public class AgroupCall {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<LogCall> all() {
+        return listLogCalls;
     }
 }

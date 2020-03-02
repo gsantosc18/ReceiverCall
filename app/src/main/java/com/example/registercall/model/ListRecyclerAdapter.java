@@ -14,15 +14,18 @@ import com.example.registercall.R;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 public class ListRecyclerAdapter extends RecyclerView.Adapter<ListHolder> {
     private List<LogCall> logCallList;
+    private List<AgroupCall> agroupCall;
 
-    public ListRecyclerAdapter(List<LogCall> logCallList) {
-        this.logCallList = logCallList;
+    public ListRecyclerAdapter() {
+        this.logCallList = logCallList = new ArrayList<>(  );
+        this.agroupCall = new ArrayList<>();
     }
 
     @NonNull
@@ -34,10 +37,20 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ListHolder listHolder, int i) {
-        LogCall log = this.logCallList.get(i);
+        AgroupCall agroupCall2 = this.agroupCall.get(i);
+        LogCall log = agroupCall2.all().get( agroupCall2.getCount()-1 );
+//        LogCall log = logCallList.get(i);
         Format formatar = new Format();
+        String title = log.getName().trim().isEmpty()?log.getNumber():log.getName();
+        int size = agroupCall2.getCount();
 
-        listHolder.nome.setText(log.getName());
+        Log.e("AgroupCall", agroupCall2.getName());
+
+        if ( size > 1 ) {
+            title = title+" ("+size+")";
+        }
+
+        listHolder.nome.setText(title);
         listHolder.duracao.setText( formatar.hour(log.getDuration()*1000,"mm:ss") );
 
         if (!log.getFoto().trim().isEmpty())
@@ -53,23 +66,42 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListHolder> {
         }
 
         try {
-            listHolder.date.setText( formatDateHour( log.getDate() ) );
-        } catch (ParseException e) {
+            listHolder.date.setText( log.getDate() );
+        } catch (Exception e) {
             Log.e("Erro datetime", e.getMessage());
         }
     }
 
     @Override
     public int getItemCount() {
-        return logCallList != null ? logCallList.size() : 0;
+        return agroupCall != null ? agroupCall.size() : 0;
     }
 
     public void add(LogCall logCall)
     {
-        logCallList.add(logCall);
+        AgroupCall agc = new AgroupCall( logCall );
+
+        if ( agroupCall.size() > 0 ) {
+            AgroupCall ag = agroupCall.get( agroupCall.size()-1 );
+            LogCall logCall1 = ag.all().get( 0 );
+            if (
+                  ( ag.getName().equals( logCall.getNumber() ) ||
+                  ag.getName().equals( logCall.getNumber() ) ) &&
+                  logCall.getChamada().getStatus() == logCall1.getChamada().getStatus()
+            ) {
+                agroupCall.get( agroupCall.size()-1 ).addCall( logCall );
+            } else {
+                agroupCall.add( agc );
+            }
+        } else {
+            agroupCall.add( agc );
+        }
+
+//        Log.e("Agroup Call", agroupCall.size()+"");
+//        logCallList.add(logCall);
     }
 
-    private String formatDateHour(String datetime) throws ParseException {
+    private static String formatDateHour(String datetime) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         dateFormat.setTimeZone( TimeZone.getTimeZone("GMT-03:00"));
         Date date = dateFormat.parse(datetime);
