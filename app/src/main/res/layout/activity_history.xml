@@ -19,6 +19,7 @@
         android:id="@+id/listLogCall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundDark" />
+        android:background="@color/backgroundDark"
+        android:layoutAnimation="@anim/layout_animation_fall_down"/>
 
 </LinearLayout>

@@ -6,6 +6,7 @@ import java.util.List;
 public class AgroupCall {
     private String name;
     private List<LogCall> listLogCalls;
+    private boolean selected;
 
     public AgroupCall() {
         listLogCalls = new ArrayList<>();
@@ -38,5 +39,13 @@ public class AgroupCall {
 
     public List<LogCall> all() {
         return listLogCalls;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean getSelected(){
+        return this.selected;
     }
 }

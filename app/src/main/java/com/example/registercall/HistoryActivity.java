@@ -16,17 +16,23 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
 import com.example.registercall.model.ChamadaDAO;
 import com.example.registercall.model.ChamadaEntity;
 import com.example.registercall.model.Contato;
+import com.example.registercall.model.ListHolder;
 import com.example.registercall.model.ListRecyclerAdapter;
+import com.example.registercall.model.ListRecyclerSelectItem;
 import com.example.registercall.model.LogCall;
 import com.example.registercall.model.RegisterNotification;
 
@@ -40,6 +46,8 @@ public class HistoryActivity extends AppCompatActivity
     private ListRecyclerAdapter adapter;
     private RecyclerView listView;
     private NotificationManager notificationManager;
+    private ActionMode actionMode;
+    private List<String> permissionsAbsent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,7 +60,19 @@ public class HistoryActivity extends AppCompatActivity
         RegisterNotification.stopCount();
 
         // adapter = new CustomAdapter(HistoryActivity.this, new ArrayList<LogCall>() );
-        adapter = new ListRecyclerAdapter();
+        adapter = new ListRecyclerAdapter(HistoryActivity.this);
+
+        adapter.setListener( new ListRecyclerSelectItem() {
+            @Override
+            public void onItemClick(int position, ListHolder listHolder) {
+                enableActionMode(position);
+            }
+
+            @Override
+            public void onItemLongClick(int position, ListHolder listHolder) {
+                enableActionMode(position);
+            }
+        } );
 
         startHistoryTask();
 
@@ -66,9 +86,12 @@ public class HistoryActivity extends AppCompatActivity
         notificationManager = (NotificationManager)getSystemService(this.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
 
+        int resId = R.anim.layout_animation_fall_down;
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(HistoryActivity.this, resId);
+
         listView = (RecyclerView) findViewById(R.id.listLogCall);
         listView.setLayoutManager( new LinearLayoutManager(this) );
-
+        listView.setLayoutAnimation(animation);
         listView.setAdapter(adapter);
 
         setupListView();
@@ -76,55 +99,93 @@ public class HistoryActivity extends AppCompatActivity
 
     private void checkPermission()
     {
-        boolean canCallPhone = hasPermission(Manifest.permission.CALL_PHONE);
-        boolean canReadPhoneState = hasPermission(Manifest.permission.READ_PHONE_STATE);
-        boolean canReadContact = hasPermission(Manifest.permission.READ_CONTACTS);
-        boolean canReadCallLog = hasPermission(Manifest.permission.READ_CALL_LOG);
-        boolean canWriteCallLog = hasPermission(Manifest.permission.WRITE_CALL_LOG);
-        boolean canRecordAudio = hasPermission(Manifest.permission.RECORD_AUDIO);
-        boolean canExternalWrite = hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        addPermision(Manifest.permission.CALL_PHONE);
+        addPermision(Manifest.permission.READ_PHONE_STATE);
+        addPermision(Manifest.permission.READ_CONTACTS);
+        addPermision(Manifest.permission.READ_CONTACTS);
+        addPermision(Manifest.permission.READ_CONTACTS);
+        addPermision(Manifest.permission.RECORD_AUDIO);
+        addPermision(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (canCallPhone) {
-            requestPermission(Manifest.permission.CALL_PHONE);
-        }
-
-        if (canReadPhoneState) {
-            requestPermission(Manifest.permission.READ_PHONE_STATE);
-        }
-
-        if (canReadContact) {
-            requestPermission(Manifest.permission.READ_CONTACTS);
-        }
-
-        if (canReadCallLog) {
-            requestPermission(Manifest.permission.READ_CONTACTS);
-        }
-
-        if (canWriteCallLog) {
-            requestPermission(Manifest.permission.READ_CONTACTS);
-        }
-
-        if (canRecordAudio) {
-            requestPermission(Manifest.permission.RECORD_AUDIO);
-        }
-
-        if (canExternalWrite) {
-            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
+        requestPermission();
     }
 
     private boolean hasPermission(String permission)
     {
-        return ContextCompat
+        int permited = ContextCompat
                 .checkSelfPermission(
                         HistoryActivity.this,
-                        permission ) != PackageManager.PERMISSION_GRANTED;
+                        permission );
+        return  permited == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestPermission(String permission)
+    private void requestPermission()
     {
+        if(permissionsAbsent == null || permissionsAbsent.size() == 0) return;
+
+        String permissions[] = new String[permissionsAbsent.size()];
+        for(int i = 0; i < permissionsAbsent.size(); i++)
+        {
+            permissions[i] = permissionsAbsent.get( i );
+        }
+
         ActivityCompat.requestPermissions(HistoryActivity.this,
-                new String[]{permission},1);
+                permissions,1);
+    }
+
+    private void addPermision(String permission)
+    {
+        if ( hasPermission( permission ) ) return;
+        if(permissionsAbsent==null) permissionsAbsent = new ArrayList<>(  );
+        permissionsAbsent.add( permission );
+    }
+
+    private void enableActionMode(int position)
+    {
+
+        if(actionMode == null) {
+            actionMode = startSupportActionMode( new ActionMode.Callback() {
+                @Override
+                public boolean onCreateActionMode(ActionMode action, Menu menu) {
+                    action.getMenuInflater().inflate( R.menu.menu_actionbar, menu );
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode action, MenuItem menuItem) {
+                    if (menuItem.getItemId() == R.id.deleteItemActionMode) {
+                        adapter.deleteSelected();
+                        adapter.selectedItems.clear();
+                        adapter.unSelectedItens();
+                        actionMode.finish();
+                        recreate();
+                    }
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode action) {
+                    adapter.selectedItems.clear();
+                    adapter.unSelectedItens();
+                    adapter.notifyDataSetChanged();
+                    actionMode = null;
+                }
+            } );
+        }
+
+        adapter.toggleSelection(position);
+        final int size = adapter.selectedItems.size();
+        if (size == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(size + "");
+            actionMode.invalidate();
+        }
     }
 
     private void showHistorico()
@@ -336,20 +397,6 @@ public class HistoryActivity extends AppCompatActivity
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
-    }
-
-    private void dialContactNumber(String number)
-    {
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:"+number));
-        startActivity(intent);
-    }
-
-    private void callContactNumber(String number)
-    {
-        Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse("tel:"+number));
-        startActivity(intent);
     }
 
     private void abrirAgenda()

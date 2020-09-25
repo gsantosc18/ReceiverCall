@@ -1,5 +1,7 @@
 package com.example.registercall.model;
 
+import android.util.Log;
+
 import java.util.Date;
 
 public class LogCall {
@@ -77,5 +79,22 @@ public class LogCall {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public String formatedDuration()
+    {
+        return new Format().hour(getDuration()*1000,"mm:ss");
+    }
+
+    public String formatedHour() {
+        String hour = "00:00";
+
+        try {
+            hour = new Format().datetime( getDate(), "dd/MM/yyyy HH:mm:ss","dd/MM H:m" );
+        } catch (Exception e) {
+            Log.e("Erro datetime", e.getMessage());
+        }
+
+        return hour;
     }
 }
